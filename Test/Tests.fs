@@ -1,15 +1,13 @@
-﻿using System;
-using NUnit.Framework;
+﻿namespace Primality.Test
 
-namespace TestProject1
-{
-    [TestFixture]
-    public class Tests
-    {
-        [Test]
-        public void Test1()
-        {
-            Assert.True(true);
-        }
-    }
-}
+open FsUnitTyped
+open NUnit.Framework
+
+open Primality
+
+module TestArithmetic =
+
+    [<TestCase (2, 3, 5, 3)>]
+    let ``Test powerMod`` (baseNum : int, power : int, modulus : int, expected : int) =
+        Arithmetic.powerMod baseNum power modulus
+        |> shouldEqual expected
