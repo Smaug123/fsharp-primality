@@ -2,6 +2,7 @@ namespace Primality
 
 open Primality.Internals
 
+/// An error which occurred during Pratt-certificate generation.
 type PrattError =
     /// We found a nontrivial factor of the input integer.
     | FoundFactor of int
@@ -15,6 +16,7 @@ type PrattError =
 [<RequireQualifiedAccess>]
 module PrimeCertificate =
 
+    /// Get the integer whose primality is being witnessed (assuming this is indeed a valid primality certificate).
     let toInt (c : PrimeCertificate<int>) : int =
         match c with
         | PrimeCertificate.Two -> 2
@@ -41,6 +43,8 @@ module PrimeCertificate =
 
         go 2
 
+    /// Construct a certificate of primality for the given integer, where we have already proved the primality
+    /// of certain other integers.
     let rec make'
         (known : Map<int, PrattCertificate<int>>)
         (i : int)
@@ -75,10 +79,16 @@ module PrimeCertificate =
 
             Map.add i cert known, Ok (PrimeCertificate.Pratt cert)
 
+    /// Construct a certificate of primality for the given integer.
+    /// Note that if you are certifying multiple integers, it is more efficient to use `make'` to avoid
+    /// re-certifying the primality of various intermediate numbers.
     let make (i : int) : Result<PrimeCertificate<int>, PrattError> =
         let _, result = make' Map.empty i
         result
 
+    /// Verify that the given primality certificate is well-formed.
+    /// Note that it is possible to construct a PrimeCertificate which claims to witness the primality of a composite
+    /// number, though `make` will never give you such an invalid output; `verify` detects such cases.
     let rec verify (cert : PrimeCertificate<int>) : bool =
         match cert with
         | PrimeCertificate.Two -> true
@@ -88,9 +98,10 @@ module PrimeCertificate =
             factorsArePrime && cert.Modulus - 1 = apparentFactorisation
 
 [<RequireQualifiedAccess>]
-module Primality =
+module CompositeCertificate =
 
-    let inline verifyComposite (i : ^int) (cert : CompositeCertificate< ^int>) : bool =
+    /// Verify that the given certificate is indeed a witness to the compositeness of `i`.
+    let inline verify (i : ^int) (cert : CompositeCertificate< ^int>) : bool =
         match cert with
         | CompositeCertificate.Factor fact ->
             i % fact = LanguagePrimitives.GenericZero
@@ -102,10 +113,3 @@ module Primality =
             Arithmetic.timesMod i sqrt sqrt = LanguagePrimitives.GenericOne
             && sqrt > LanguagePrimitives.GenericOne && sqrt < i - LanguagePrimitives.GenericOne
             && i % (LanguagePrimitives.GenericOne + LanguagePrimitives.GenericOne) = LanguagePrimitives.GenericOne
-
-    let verify (i : int) (cert : Certificate<int>) : bool =
-        match cert with
-        | Certificate.Zero -> i = LanguagePrimitives.GenericZero
-        | Certificate.One -> i = LanguagePrimitives.GenericOne
-        | Certificate.Composite cert -> verifyComposite i cert
-        | Certificate.Prime cert -> PrimeCertificate.verify cert

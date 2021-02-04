@@ -20,8 +20,12 @@ type PrimeCertificate<'int> =
 /// A certificate of the Pratt test, proving that the input was prime.
 and PrattCertificate<'int> =
     {
+        /// If the certificate is for the integer n, this is n-1.
         Modulus : 'int
+        /// The certificate consists of `a` such that `a^i <> 1` mod `Modulus` (for various `i`).
+        /// This is `a`.
         Base : 'int
+        /// The prime factors of `Modulus`.
         Factors : PrimeCertificate<'int> list
     }
 

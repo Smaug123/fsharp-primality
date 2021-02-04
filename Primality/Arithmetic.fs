@@ -3,6 +3,7 @@ namespace Primality
 [<RequireQualifiedAccess>]
 module Arithmetic =
 
+    /// Compute floor(sqrt(i)).
     let inline sqrt (i : ^a) =
         if i <= LanguagePrimitives.GenericOne then i else
         let rec go start =
@@ -29,6 +30,7 @@ module Arithmetic =
         let result = go maxA minB LanguagePrimitives.GenericOne LanguagePrimitives.GenericZero LanguagePrimitives.GenericZero LanguagePrimitives.GenericOne
         if a = maxA then result else {| Hcf = result.Hcf ; A = result.B ; B = result.A |}
 
+    /// Add two integers modulo `modulus`, being sure not to overflow the maximum size of the desired integer type.
     let inline addMod (modulus : ^a) (x1 : ^a) (x2 : ^a) : ^a =
         let res = x1 + x2
         if res >= LanguagePrimitives.GenericZero then
@@ -43,6 +45,7 @@ module Arithmetic =
             else
                 ((x1 - modulus) + x2) % modulus
 
+    /// Multiply two integers modulo `modulus`, being sure not to overflow the maximum size of the desired integer type.
     let inline timesMod (modulus : ^a) (x1 : ^a) (x2 : ^a) : ^a =
         let x1 = if x1 < LanguagePrimitives.GenericZero then (x1 % modulus) + modulus else x1 % modulus
         let x2 = if x2 < LanguagePrimitives.GenericZero then (x2 % modulus) + modulus else x2 % modulus
@@ -68,6 +71,8 @@ module Arithmetic =
 
         acc
 
+    /// Raise an integer to the power of another modulo `modulus`, being sure not to overflow the maximum size of the
+    /// desired integer type.
     let inline powerMod (modulus : ^int) (a : ^int) (power : ^int) : ^int =
         if modulus = LanguagePrimitives.GenericZero then
             raise <| System.DivideByZeroException()

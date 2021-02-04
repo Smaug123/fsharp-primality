@@ -3,7 +3,8 @@ namespace Primality
 [<RequireQualifiedAccess>]
 module Certificate =
 
-    let inline find (i : int) : Certificate<int> =
+    /// Construct a primality or compositeness proof for the given integer.
+    let find (i : int) : Certificate<int> =
         let two = LanguagePrimitives.GenericOne + LanguagePrimitives.GenericOne
         if i = LanguagePrimitives.GenericZero then Certificate.Zero
         elif i = LanguagePrimitives.GenericOne then Certificate.One
@@ -27,3 +28,11 @@ module Certificate =
         | Ok cert -> Certificate.Prime cert
         | Error e ->
             failwithf "Hmm: %i (%+A)" i e
+
+    /// Verify that the given certificate is indeed a witness to the primality or compositeness of `i`.
+    let verify (i : int) (cert : Certificate<int>) : bool =
+        match cert with
+        | Certificate.Zero -> i = LanguagePrimitives.GenericZero
+        | Certificate.One -> i = LanguagePrimitives.GenericOne
+        | Certificate.Composite cert -> CompositeCertificate.verify i cert
+        | Certificate.Prime cert -> PrimeCertificate.verify cert && PrimeCertificate.toInt cert = i
