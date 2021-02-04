@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Primality", "Primality\Primality.fsproj", "{7B3B5D02-64B1-4B3C-BFB6-2DE99FD57F8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.fsproj", "{1DE851A5-E2A1-4CAC-9BC0-81CB3929CB83}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B3B5D02-64B1-4B3C-BFB6-2DE99FD57F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3B5D02-64B1-4B3C-BFB6-2DE99FD57F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3B5D02-64B1-4B3C-BFB6-2DE99FD57F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3B5D02-64B1-4B3C-BFB6-2DE99FD57F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DE851A5-E2A1-4CAC-9BC0-81CB3929CB83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DE851A5-E2A1-4CAC-9BC0-81CB3929CB83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DE851A5-E2A1-4CAC-9BC0-81CB3929CB83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DE851A5-E2A1-4CAC-9BC0-81CB3929CB83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
