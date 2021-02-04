@@ -5,7 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Tests.fs" />
+        <Compile Include="TestArithmetic.fs" />
+        <Compile Include="TestCertificate.fs" />
+        <Compile Include="TestPrimality.fs" />
     </ItemGroup>
 
     <ItemGroup>

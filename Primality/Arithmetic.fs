@@ -68,15 +68,38 @@ module Arithmetic =
 
         acc
 
-    let powerMod (a : 'int) (b : 'int) (modulus : 'int) : 'int =
+    let inline powerMod (modulus : ^int) (a : ^int) (power : ^int) : ^int =
+        if modulus = LanguagePrimitives.GenericZero then
+            raise <| System.DivideByZeroException()
+        if modulus < LanguagePrimitives.GenericZero then
+            raise <| System.ArgumentOutOfRangeException "modulus"
+        if power < LanguagePrimitives.GenericZero then
+            raise <| System.ArgumentOutOfRangeException "power"
+        if modulus = LanguagePrimitives.GenericOne then LanguagePrimitives.GenericZero else
         let two = LanguagePrimitives.GenericOne + LanguagePrimitives.GenericOne
         let rec go (power : 'int) (acc : 'int) (exponent : 'int) =
             if exponent = LanguagePrimitives.GenericZero then
                 acc
             else
-                let acc = if exponent % two = LanguagePrimitives.GenericOne then (acc * power) % modulus else acc
-                go ((power * power) % modulus) acc (exponent >>> 1)
+                let acc = if exponent % two = LanguagePrimitives.GenericOne then timesMod modulus acc power else acc
+                go (timesMod modulus power power) acc (exponent >>> 1)
 
-        go a LanguagePrimitives.GenericOne b
+        go a LanguagePrimitives.GenericOne power
 
+    /// A slow, inefficient integer factorisation algorithm.
+    let factor (i : int) : int list =
+        if i = 1 then [] else
+        if i <= 0 then raise <| System.ArgumentOutOfRangeException "i"
+        let rec go (startPoint : int) (acc : int list) (i : int) : int list =
+            if startPoint * startPoint > i then i :: acc else
+            if i = 1 then acc else
+            if i % startPoint = 0 then go startPoint (startPoint :: acc) (i / startPoint) else
+            go (startPoint + 2) acc i
+
+        let rec extractTwo (acc : int list) (i : int) : int * (int list) =
+            if i % 2 = 0 then extractTwo (2 :: acc) (i / 2) else i, acc
+
+        let i, factors = extractTwo [] i
+        if i = 1 then factors else
+        go 3 factors i
 
